@@ -13,6 +13,7 @@ var writeStream = fs.createWriteStream('output.txt', { highWaterMark: 1});
 readerStream.on('data', function(chunk) {
     // 當讀進資料就寫入資料
     // write會回傳一個boolean，如果資料沒辦法寫到writeStream的buffer(可能是buffer太滿，還沒流到目的地去)，就會回傳false，並等待buffer清空後會觸發drain的callback，否則回傳true
+    // 這個網站也有描述相關 http://taobaofed.org/blog/2015/12/31/nodejs-drain/
     var b = writeStream.write(chunk);
     if (!b) {
         // 發現buffer不能丟資料之後就應該先暫停寫入了，不要再繼續丟資料
