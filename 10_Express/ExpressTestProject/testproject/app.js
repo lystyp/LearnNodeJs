@@ -81,4 +81,17 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+/*
+  我把mongoDB的東西寫在下面這裡
+  一共新增了兩個模組，第一個是”mongodb”，使node.js可以使用MongoDB；第二個”monk”是用來連結MongoDB的，
+  它的好處是簡單易用，適合新手。跟”monk”類似的模組有”mongoose”，”mongoose”比”monk”更強，更複雑
+
+  mongoDB跟js這邊溝通也是透過port來相連的
+  mongoDB預設的port是27017
+*/
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/testproject');
+
+
 module.exports = app;

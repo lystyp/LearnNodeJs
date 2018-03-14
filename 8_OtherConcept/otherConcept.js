@@ -21,4 +21,11 @@ GET、POST
 GET是在URL那邊取得的
 POST是靠html的submit原件來送的
 http://www.runoob.com/nodejs/node-js-get-post.html
+
+關於NodeJS的多執行續
+http://www.runoob.com/nodejs/nodejs-process.html
+
+關於Http的方法的結構
+http://www.runoob.com/http/http-messages.html
+
 */
