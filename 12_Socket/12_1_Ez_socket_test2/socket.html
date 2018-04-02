@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <script>
+        var socket = io.connect();
+        socket.on('dataChanged', function(data){
+            console.log("Some where emmit dataChanged event.")
+            $('#data').text("Data is changed to : \n" + data);
+        });
+
+        // 只要text那邊有鍵盤輸入都會觸發這個
+        $(document).ready(function(){
+          $('#text').keypress(function(e){
+            // String.fromCharCode(e.charCode) 把鍵盤打得自抓出來轉string
+            socket.emit('dataFromClient', String.fromCharCode(e.charCode));
+          });
+        });
+    </script>
+    <div id="data">"Data is not changed."</div>
+    <textarea id="text"></textarea>
+  </body>
+</html>

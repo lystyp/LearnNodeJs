@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <script>
+        var socket = io.connect();
+        socket.on('data', function(data){
+            console.log("Some where emmit data event.")
+            $('#data').text(data.data);
+        });
+    </script>
+    <div id="data">"???"</div>
+  </body>
+</html>
