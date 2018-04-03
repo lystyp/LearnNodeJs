@@ -42,7 +42,7 @@ var serv_io = io.listen(server);
 
 var s = "";
 serv_io.sockets.on('connection', function(socket) {
-    console.log("Socket get connection : " + socket)
+    console.log("Socket get connection : " + socket.client.id)
     socket.on('dataFromClient', function(data){
         console.log("Client send data : " + data);
         s = s + data;

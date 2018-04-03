@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  </head>
+  <meta charset="utf-8">
+  <body>
+    <script>
+      var name;
+      $(document).ready(function(){
+        name = prompt("請輸入使用者名稱", "");
+        if(name == "" || name == null) {
+          name = "怪人";
+        }
+        console.log("name = " + name)
+        var socket = io.connect();
+        socket.emit('newUser', name);
+
+        $('#btnSendMsg').click(function(){
+          socket.emit('newText', {"name":name , "text":$('#text').val()});
+          $('#text').val("");
+        });
+
+        $('#text').keypress(function(e){
+          if (e.keyCode == 13) {
+            $('#btnSendMsg').click();
+          }
+        });
+
+
+        socket.on("msgUpdate", function(data){
+          $('#message_block').text("");
+          for(var i = 0;i < data.length; i++){
+            var s = '<p>' + data[i] + '</p>';
+            $('#message_block').append(s);
+          }
+        });
+      });
+    </script>
+    <div>
+      <input id="text"></input>
+    </div>
+
+    <div>
+      <button id = "btnSendMsg">"送出"</button>
+    </div>
+
+    <div id="message_block">
+    </div>
+  </body>
+</html>
