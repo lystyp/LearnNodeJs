@@ -32,4 +32,50 @@ console.log('finish!');
 var p2 = awaitPromiseFunc('3!', true);
 console.log(p2);
 
+/*
+原始版本  
+var result = await Obj;
+*/
+
+/*
+同義版本
+function awaitFunc(Obj) {
+    if (Obj == Promise) {
+        Obj,then((v) => {
+            return v;
+        });
+    } else {
+        Promise.resolve(Obj).then((v) => {
+            return v;
+        });
+    }
+}
+var result = awaitFunc(Obj);
+*/
+
+/*
+async funciton will return a promise
+原始版本
+var func = async function funcDeclareByAsync(){
+    //Do something
+};
+*/
+
+/*
+同義版本
+function asyncFunc() {
+    return Promise.resolve().then(function() {
+        // Do something
+    });
+}
+var func = asyncFunc();
+*/
+var promise = func();
+promise.then(function(value){
+    // value是從// Do something那邊return的值
+})
+
+
+
+
 
