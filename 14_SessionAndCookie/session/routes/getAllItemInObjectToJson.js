@@ -35,7 +35,7 @@ function getContent(obj, layer){
 }
 function content(o ,i){
   mStr = getContent(o, i);
-  console.log(mStr)
+  // console.log(mStr)
   return {
     getContentStr:mStr,
     writeToFile:function(name){

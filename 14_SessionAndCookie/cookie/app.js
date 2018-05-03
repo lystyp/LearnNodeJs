@@ -35,12 +35,14 @@ app.use('/l', function(req, res, next) {
   var s = JSON.stringify("Cookie in headers = " + req.headers.cookie); // 預設cookie就會存這裡，就算沒有用express相關cookie套件，但會是沒有解析過的格式
   var s2 = JSON.stringify("Cookies in headers = " + req.headers.cookies); // Undefined，在req裡，不在header裡
   var s3 = JSON.stringify("CookieParser in headers = " + req.headers.cookieParser); // Undefined，在req裡，不在header裡
+  console.log('------------------------------------------------------------');
   console.log("Load cookie : " + s + "\n, " + s2 + "\n, " + s3);
   console.log("req.cookie = " + req.cookie); // Undefined，req裡的第一層有cookies和signedCookies是被cookie相關module處理過才存到這裡的
   console.log("Signed test in cookies = " + req.cookies.signedTest); // Undefined
   console.log("Unsigned test in cookies = " + req.cookies.unsignedTest);
   console.log("Signed test in signedCookies = " + req.signedCookies.signedTest);
   console.log("Unsigned test in signedCookies = " + req.signedCookies.unsignedTest);// Undefined
+  console.log('------------------------------------------------------------');
 
   res.end(s);
 });
@@ -65,6 +67,8 @@ cookie也在，但用無痕視窗cookie就不見了，所以應該是綁瀏覽�
 然後client發request的時候就會根據發給哪個domain來順便發對應的cookie給他
 
 ！！cookie從client發到server的數量有限制，每個瀏覽器不同
+http://bubkoo.com/2014/04/21/http-cookies-explained/
+cookie 存在许多限制条件，来阻止 cookie 滥用并保护浏览器和服务器免受一些负面影响。有两种 cookie 限制条件：cookie 的属性和 cookie 的总大小。原始规范中限定每个域名下不超过 20 个 cookie，早期的浏览器都遵循该规范，并且在 IE7 中有更近一步的提升。在微软的一次更新中，他们在 IE7 中增加 cookie 的限制数量到 50 个，与此同时 Opera 限定 cookie 数量为 30 个，Safari 和 Chrome 对与每个域名下的 cookie 个数没有限制。
 ！！每個domain可以存的cookie最多不能超過4KB
 
 sign的意義：
@@ -79,6 +83,18 @@ s:signed test msg.OMh+/34UjLU0dTtfAPkCxiRLmkdsTj5+ywBowGGierY
 s:signed test newMsg.OMh+/34UjLU0dTtfAPkCxiRLmkdsTj5+ywBowGGierY
 這樣在server把signed test newMsg拿去sign會發現跟client存的不一樣了
 表示被偷改了
+
+所以sign key的用意是在防止資料被修改，其實沒辦法防止資料被盜
+
+如果我在A電腦登入然後存了cookie，下次用A電腦連server可以用cookie判斷是不是有登入過，就可以不用重複登入
+但因為cookie可以被簡單的取得，如果有人用A電腦取得cookie，然後在B電腦用這個cookie來發給server，那server不就以為B電腦有登入了嗎?
+這個問題怎麼解呢?
+等念完session再回頭來看這個問題
+
+Q:要怎麼自己塞header來假裝有cookie?
+不知道欸，因為cookie還有到期時間、httpOnly等等其他一大堆資訊要設定，不能直接在header單純塞一個cookie就搞定，
+之後再研究看看吧
+
 */
 
 
