@@ -44,5 +44,9 @@ ORDER BY 多列的时候，先按照第一个column name排序，在按照第二
   沒有給值的欄位會給個初始值，如果那欄是存int，就會是０之類的
 
   關於更新值
+  UPDATE database_name SET title_name = value where XXX
   http://www.runoob.com/sql/sql-update.html
+
+  UPDATE user SET authentication_string = OLD_PASSWORD('') where user = 'Daniel';
+
 */
