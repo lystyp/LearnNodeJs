@@ -1,0 +1,1 @@
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql-8.0.11-macos10.13-x86_64
