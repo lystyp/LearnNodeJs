@@ -1,5 +1,6 @@
 const toRegister = require('../models/register_model');
 const toLogin = require('../models/login_model');
+const toUpdate = require('../models/update_model');
 const Utils = require('./utils');
 
 
@@ -89,9 +90,25 @@ module.exports = class Member {
                         }
                     })
                 } else {
-                    res.json({
-                        test: "token正確"
+                    const id = tokenResult;
+                    const memberUpdateData = { update_date: onTime() }
+                    if (req.body.password) {
+                        memberUpdateData.password = utils.getRePassword(req.body.password);
+                    }
+                    if (req.body.name) {
+                        memberUpdateData.name = req.body.name;
+                    }
+
+                    toUpdate(id, memberUpdateData).then(result => {
+                        res.json({
+                            result: result
+                        })
+                    }, (err) => {
+                        res.json({
+                            result: err
+                        })
                     })
+
                 }
             });
         }
