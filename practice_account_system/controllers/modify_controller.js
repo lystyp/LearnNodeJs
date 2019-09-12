@@ -1,12 +1,77 @@
 const toRegister = require('../models/register_model');
 const toLogin = require('../models/login_model');
 const toUpdate = require('../models/update_model');
+const getInfo = require('../models/get_info_model');
 const Utils = require('./utils');
 
 
 utils = new Utils();
 module.exports = class Member {
+    mainPage(req, res, next) {
+        const token = req.cookies.token
+        console.log("----- mainPage -----")
+        console.log(JSON.stringify(token))
+        console.log("--------------------")
+        if (utils.checkNull(token) === false) {
+            utils.verifyToken(token).then(tokenResult => {
+                if (tokenResult) {
+                    const id = tokenResult;
+                    getInfo(id).then(result => {
+                        res.render("index", {
+                            hasLogin: true, 
+                            title :'Hello ~' + result[0].name
+                        });
+                    }, err => {
+                        res.clearCookie("token");
+                        res.render("error_and_back", err);
+                    });
+                } else {
+                    res.clearCookie("token");
+                    res.render("error_and_back", {
+                        status: "token錯誤。",
+                        err: "token無法解析或已過期"
+                    });
+                }
+            });
+        } else {
+            res.render("index", {
+                hasLogin: false, 
+                title :'Not Login yet~'});
+        }
+        
+    }
+    registerPage(req, res, next) {
+        res.render("register_page", {title :'Register~'});
+    }
+    updatePage(req, res, next) {
+        const token = req.cookies.token
+        if (utils.checkNull(token) === false) {
+            utils.verifyToken(token).then(tokenResult => {
+                if (tokenResult) {
+                    const id = tokenResult;
+                    getInfo(id).then(result => {
+                        res.render("update_page", {
+                            name: result[0].name, 
+                            title :'Plz update~ ' + result[0].name
+                        });
+                    }, err => {
+                        res.clearCookie("token");
+                        res.render("error_and_back", err);
+                    });
+                } else {
+                    res.clearCookie("token");
+                    res.render("error_and_back", {
+                        status: "token錯誤。",
+                        err: "token無法解析"
+                    });
+                }
+            });
+        } else {
+            res.redirect("/")
+        }
+    }
     register(req, res, next) {
+        res.clearCookie("token");
         // 獲取client端資料
         const memberData = {
             name: req.body.name,
@@ -14,28 +79,29 @@ module.exports = class Member {
             password: utils.getRePassword(req.body.password),
             create_date: onTime()
         }
+        console.log("----- register -----")
+        console.log(JSON.stringify(memberData))
+        console.log("--------------------")
+
         const checkEmail = utils.checkEmail(memberData.email);
         // 不符合email格式
         if (checkEmail === false) {
-            res.json({
-                result: {
-                    status: "註冊失敗。",
-                    err: "請輸入正確的Eamil格式。(如1234@email.com)"
-                }
-            })
+            res.render("error_and_back",  {
+                status: "註冊失敗。",
+                err: "請輸入正確的Eamil格式。(如1234@email.com)"
+            });
         // 若符合email格式
         } else if (checkEmail === true) {
             // 將資料寫入資料庫
             toRegister(memberData).then(result => {
                 // 若寫入成功則回傳
-                res.json({
-                    result: result
-                })
+                res.render("error_and_back",  {
+                    status: JSON.stringify(result),
+                    err: ""
+                });
             }, (err) => {
                 // 若寫入失敗則回傳
-                res.json({
-                    err: err
-                })
+                res.render("error_and_back", err);
             })
         }
     }
@@ -48,22 +114,20 @@ module.exports = class Member {
         }
         toLogin(memberData).then(rows =>{
             if (utils.checkNull(rows ) === true){
-                res.json({
-                    result:{
-                        status:"登入失敗",
-                        err:"請輸入正確的帳號或密碼"
-                    }
-                })
+                res.clearCookie("token");
+                res.render("error_and_back", {
+                    status:"登入失敗",
+                    err:"請輸入正確的帳號或密碼"
+                });
             } else {
                 // 產生token
                 const token = utils.generateToken(rows[0].id)
-                res.setHeader('token', token);
-                res.json({
-                    result: {
-                        status: "登入成功。",
-                        loginMember: "歡迎 " + rows[0].name + " 的登入！",
-                    }
-                })
+                // res.setHeader('token', token);
+                res.cookie('token', token, {signed: false});
+                console.log("----- login -----")
+                console.log(JSON.stringify(token))
+                console.log("--------------------")
+                res.redirect("/");
             }
         }, err => {
             // 若登入失敗則回傳
@@ -74,21 +138,20 @@ module.exports = class Member {
     }
 
     update(req, res, next) {
-        const token = req.headers['token'];
+        const token = req.cookies.token;
         //確定token是否有輸入
         if (utils.checkNull(token) === true) {
-            res.json({
-                err: "請輸入token！"
+            res.render("error_and_back", {
+                status: "找不到token!",
+                err: "請登入！"
             })
         } else {
             utils.verifyToken(token).then(tokenResult => {
-                if (tokenResult === false ) {
-                    res.json({
-                        result: {
-                            status: "token錯誤。",
-                            err: "請重新登入。"
-                        }
-                    })
+                if (!tokenResult) {
+                    res.render("error_and_back", {
+                        status: "token錯誤。",
+                        err: "請重新登入。"
+                    });
                 } else {
                     const id = tokenResult;
                     const memberUpdateData = { update_date: onTime() }
@@ -100,13 +163,9 @@ module.exports = class Member {
                     }
 
                     toUpdate(id, memberUpdateData).then(result => {
-                        res.json({
-                            result: result
-                        })
+                        res.redirect("/");
                     }, (err) => {
-                        res.json({
-                            result: err
-                        })
+                        res.render("error_and_back", err)
                     })
 
                 }

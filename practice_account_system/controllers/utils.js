@@ -44,11 +44,11 @@ module.exports = class Utils {
             if (token) {
                 jwt.verify(token, jwt_key.key, function (err, decoded) {
                     if (err) {
-                        tokenResult = false;
+                        tokenResult = undefined;
                         resolve(tokenResult);
                     } else if (decoded.exp <= time) {
                         //token過期判斷
-                        tokenResult = false;
+                        tokenResult = undefined;
                         resolve(tokenResult);
                     } else {
                         //若正確

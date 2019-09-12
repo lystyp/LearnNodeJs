@@ -6,31 +6,27 @@
   <body>
     <h1><%= title %></h1>
 
-    <form name="form1" method="POST" action="/login">
+    <form name="form1" method="POST" action="/register">
     <table>
         <tr>
         <td>Email</td>
         <td><input type="text" name="email" ></td>
         </tr>
         <tr>
+        <td>Name</td>
+        <td><input type="text" name="name" ></td>
+        </tr>
+        <tr>
         <td>Password</td>
         <td><input type="text" name="password" ></td>
         </tr>
         <tr>
-        <td colspan="2"><input type="submit" value="Login" ></td>
+        <td colspan="2"><input type="submit" value="Register" ></td>
         </tr>
     </table>
-    </form>
-    
-    <% if(hasLogin) { %>
-      <br/>
-      <br/>
-      <a href="/updatePage">Update member information</a> 
-    <% } %> 
+    </form> 
     <br/>
     <br/>
-    <a href="/registerPage">Register</a>
-
-
+    <a href="/">Home</a>
   </body>
 </html>
