@@ -81,6 +81,7 @@ function MainPromiseFunc(v) {
 
     return new Promise(function(resoleve, reject){      
         //Do something to 判斷執行結果是成功或是有誤
+        // 這裡就是初始化promise物件來決定一開始的狀態
         v = v + "<MainPromiseFunc>";
         console.log("V = " + v);
         var success = true;
@@ -143,6 +144,11 @@ MainPromiseFunc("Get info : ").then(
 
 
 console.log("Code finish!");
+
+function sleep(milliSeconds) {
+    var startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + milliSeconds);
+}
 
 // resolve跟reject不管有沒有return值都會往下跑
 // 如果then沒有給resolve，那值會順延給下一個then的resolve嗎？會
