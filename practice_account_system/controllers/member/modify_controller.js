@@ -1,17 +1,14 @@
-const toRegister = require('../models/register_model');
-const toLogin = require('../models/login_model');
-const toUpdate = require('../models/update_model');
-const getInfo = require('../models/get_info_model');
-const Utils = require('./utils');
+const toRegister = require('../../models/register_model');
+const toLogin = require('../../models/login_model');
+const toUpdate = require('../../models/update_model');
+const getInfo = require('../../models/get_info_model');
+const Utils = require('../utils');
 
 
 utils = new Utils();
 module.exports = class Member {
     mainPage(req, res, next) {
         const token = req.cookies.token
-        console.log("----- mainPage -----")
-        console.log(JSON.stringify(token))
-        console.log("--------------------")
         if (utils.checkNull(token) === false) {
             utils.verifyToken(token).then(tokenResult => {
                 if (tokenResult) {
@@ -40,9 +37,18 @@ module.exports = class Member {
         }
         
     }
+
+    logout(req, res, next) {
+        res.clearCookie("token");
+        res.render("index", {
+            hasLogin: false, 
+            title :'Not Login yet~'});
+    }
+    
     registerPage(req, res, next) {
         res.render("register_page", {title :'Register~'});
     }
+
     updatePage(req, res, next) {
         const token = req.cookies.token
         if (utils.checkNull(token) === false) {
@@ -70,6 +76,7 @@ module.exports = class Member {
             res.redirect("/")
         }
     }
+
     register(req, res, next) {
         res.clearCookie("token");
         // 獲取client端資料
@@ -148,6 +155,7 @@ module.exports = class Member {
         } else {
             utils.verifyToken(token).then(tokenResult => {
                 if (!tokenResult) {
+                    res.clearCookie("token");
                     res.render("error_and_back", {
                         status: "token錯誤。",
                         err: "請重新登入。"
