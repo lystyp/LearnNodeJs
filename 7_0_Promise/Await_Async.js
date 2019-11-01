@@ -5,6 +5,12 @@
 // await用來修飾promise...嗎?，原本promise往下跑不會佔住當下執行續，用await修飾的promise會佔住當下執行續，始之從非同步變成同步
 // async 用來修飾function...嗎，此function預期應回傳promise
 
+/*
+!!!!
+新重點~~~
+await跟then的腳色很像，遇到await就是開新的thread跑了~~~~，
+所以async只會跑到await的前一刻，await function就結束了!!!!!
+*/
 function awaitFunc1(v) {
     console.log('awaitFunc1 start');
     return 'awaitFunc1 Msg:' + v;
