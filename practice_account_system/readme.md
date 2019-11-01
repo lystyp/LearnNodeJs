@@ -88,3 +88,16 @@ JWT與一般session的差別:
 
 
 
+(19)建資料庫囉~
+建三個表格，使用者list、產品list、購買list
+其中購買list的primary key是組合key，包含order_id、user_id、product_id
+為何?
+可以看成我這個表格的需求就是，
+一個三維的獨立表格，
+每次購物清單 > order_id
+購物清單裡的產品是哪個使用者買的 > user_id
+買了什麼東西 > product_id
+
+
+之後前端可以看這個學一下
+https://ithelp.ithome.com.tw/users/20103131/ironman/1012
