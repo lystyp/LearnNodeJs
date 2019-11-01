@@ -213,6 +213,7 @@ class Promise(func){
 
     // then會等狀態從未知變成確定的狀態後才會執行
     function then(res, rej) {
+        !!!!!!!這裡面的code是開一個新的thread跑，來達成非同步的功能，promise外面在promise new完之後就會繼續往下跑了
         try{
             // 假如沒有error的情況下，成功執行res或rej，那狀態就是success，否則狀態繼續往下傳
             if(state == success) {
