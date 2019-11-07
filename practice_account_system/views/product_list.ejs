@@ -4,6 +4,30 @@
     <title>Procust list page</title>
   </head>
   <body>
-    <h1><%= title %></h1>
+    <form name="form1" method="POST" action="/product/order">
+      <table border="1">
+          <tr>
+            <td>ID</td><td>Product</td><td>Descript</td><td>Price</td><td>Quantity</td>
+          </tr>
+        <% for (var i in product_list) { %>
+          <tr>
+            <td><%= product_list[i].id%></td>
+            <td><%= product_list[i].name%></td>
+            <td><%= product_list[i].remark%></td>
+            <td><%= product_list[i].price%></td>
+            <td><%= product_list[i].quantity%></td>
+            <td>
+              <select name = <%= product_list[i].id%>>
+                <% for (var j =0; j <= product_list[i].quantity; j++) { %>
+                  <option value=<%= j%>><%= j%></option>
+                <% } %>
+              </select>
+            </td>
+          </tr>
+        <% } %>
+      </table>
+      <td colspan="2"><input type="submit" value="Order"></td>
+    </form>
   </body>
 </html>
+

@@ -1,7 +1,7 @@
-const toRegister = require('../../models/register_model');
-const toLogin = require('../../models/login_model');
-const toUpdate = require('../../models/update_model');
-const getInfo = require('../../models/get_info_model');
+const toRegister = require('../../models/member/register_model');
+const toLogin = require('../../models/member/login_model');
+const toUpdate = require('../../models/member/update_model');
+const getInfo = require('../../models/member/get_info_model');
 const Utils = require('../utils');
 
 

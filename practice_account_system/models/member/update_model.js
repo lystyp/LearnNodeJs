@@ -1,4 +1,4 @@
-const db = require('./connection_db');
+const db = require('../connection_db');
 
 module.exports = function update(id, memberUpdateData) {
     let result = {};
