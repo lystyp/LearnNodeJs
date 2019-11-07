@@ -92,3 +92,25 @@ function sleep(milliSeconds) {
 
 
 
+/*
+以下code示範async 要怎麼接error
+*/
+function awaitPromiseFunc(v, b) {
+    console.log('awaitPromiseFunc start');
+    return new Promise((res, rej) => {
+        if (b) res(v);
+        else rej(v);
+    }); 
+  };
+  
+  async function As(){
+    rlt = await awaitPromiseFunc("123", false);
+    console.log(rlt);
+  }
+  
+  
+  As().then(res=> {
+    console.log("Success");
+  }, err=> {
+    console.log("Fail");
+  })
