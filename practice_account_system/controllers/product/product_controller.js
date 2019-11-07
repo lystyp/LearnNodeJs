@@ -47,13 +47,17 @@ module.exports = class Product{
                         })
                     }, err => {
                         res.render("error_and_back", {
-                            status: err.status,
-                            err: err.err
+                            status: "伺服器錯誤",
+                            err: err
                         });
                     });
                 }
             });
         }
+    }
+
+    getOrderedList(req, res, next) {
+        // 下一個要做這裡
     }
 
 
