@@ -101,3 +101,31 @@ JWT與一般session的差別:
 
 之後前端可以看這個學一下
 https://ithelp.ithome.com.tw/users/20103131/ironman/1012
+
+------------------------------
+今天學到的幾個東西
+1.
+call sql的functoin的時候，要帶callback進去，像下面這個，
+如果在callback function裡面發生error，像是取rows取錯之類的，他的error是不會丟出來給promise會直接掛掉!!!!
+因為那個function已經是DB新開thread在跑了，他丟的error promise接不到
+const getOrderID = () => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT MAX(order_id) AS id FROM order_list', function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+          reject(err);
+          return;
+        }
+        resolve(rows[0].id);
+      })
+    })
+}
+
+2.
+html的表單只有get 跟 post方法而已!!!
+https://softwareengineering.stackexchange.com/questions/114156/why-are-there-are-no-put-and-delete-methods-on-html-forms
+
+3.表單要送一些自訂資訊(非表單裡面)用hidden
+<input type="hidden" name = "order_id" value=<%= list_info['order_id'] %>>
+https://www.w3school.com.cn/tags/att_input_type.asp
+所有type

@@ -1,5 +1,7 @@
 const getProductData = require('../../models/product/get_all_product_model');
 const orderProduct = require('../../models/product/order_product_model');
+const getOrderedList = require('../../models/product/get_ordered_list_model');
+const deleteOrderedList = require('../../models/product/delete_ordered_list_model');
 
 module.exports = class Product{
     getAllProductList(req, res, next) {
@@ -17,7 +19,6 @@ module.exports = class Product{
 
     orderProductListData(req, res, next) {
         console.log(req.cookies.token);
-        console.log(JSON.stringify(req.body));
         const token = req.cookies.token;
         if (utils.checkNull(token) === true) {
             res.render("error_and_back", {
@@ -40,11 +41,7 @@ module.exports = class Product{
                         'orderDate': onTime(),
                     }
                     orderProduct(orderList).then(result => {
-                        console.log(result)
-                        res.render("ordered_list", {
-                            product_list :result.orderData, 
-                            total_price :result.total_price
-                        })
+                        res.redirect("/product/orderedList")
                     }, err => {
                         res.render("error_and_back", {
                             status: "伺服器錯誤",
@@ -57,7 +54,71 @@ module.exports = class Product{
     }
 
     getOrderedList(req, res, next) {
-        // 下一個要做這裡
+        console.log(req.cookies.token);
+        console.log(JSON.stringify(req.body));
+        const token = req.cookies.token;
+        if (utils.checkNull(token) === true) {
+            res.render("error_and_back", {
+                status: "找不到token!",
+                err: "請登入！"
+            })
+        } else {
+            utils.verifyToken(token).then(tokenResult => {
+                if (!tokenResult) {
+                    res.clearCookie("token");
+                    res.render("error_and_back", {
+                        status: "token錯誤。",
+                        err: "請重新登入。"
+                    });
+                } else {
+                    const id = tokenResult;
+                    getOrderedList(id).then(result => {
+                        console.log(result)
+                        res.render("ordered_list", {
+                            total_list :result 
+                        })
+                    }, err => {
+                        res.render("error_and_back", {
+                            status: "伺服器錯誤",
+                            err: err.err ? err.err:err
+                        });
+                    });
+                }
+            });
+        }
+    }
+
+    deleteOrderedList(req, res, next) {
+        console.log(req.cookies.token);
+        console.log(req.query["order_id"]);
+        
+        const token = req.cookies.token;
+        if (utils.checkNull(token) === true) {
+            res.render("error_and_back", {
+                status: "找不到token!",
+                err: "請登入！"
+            })
+        } else {
+            utils.verifyToken(token).then(tokenResult => {
+                if (!tokenResult) {
+                    res.clearCookie("token");
+                    res.render("error_and_back", {
+                        status: "token錯誤。",
+                        err: "請重新登入。"
+                    });
+                } else {
+                    const member_id = tokenResult;
+                    deleteOrderedList( req.query["order_id"],member_id).then(result => {
+                        res.redirect("/product/orderedList")
+                    }, err => {
+                        res.render("error_and_back", {
+                            status: "伺服器錯誤",
+                            err: err.err ? err.err:err
+                        });
+                    });
+                }
+            });
+        }
     }
 
 

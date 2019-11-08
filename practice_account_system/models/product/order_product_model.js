@@ -1,11 +1,7 @@
 const db = require('../connection_db');
 
 module.exports = async function orderProduct(orderList) {
-    let result = {};
-    let orderAllData  = [];
-    let total_price = 0;
     let id = await getOrderID() + 1;
-
     for (i in orderList['order_info']) {
         let productId = i
         let productQuantity = orderList['order_info'][productId]
@@ -25,20 +21,7 @@ module.exports = async function orderProduct(orderList) {
                 throw "訂單輸入失敗!"
             }
         })
-        dataForUser = {
-            'id': productId,
-            'name': info.name,
-            'order_quantity': productQuantity,
-            'order_price': orderData['order_price']
-        }
-        total_price = total_price + orderData['order_price'];
-        orderAllData.push(dataForUser);
     }
-
-    result.total_price = total_price;
-    result.state = "訂單建立成功。";
-    result.orderData = orderAllData
-    return result;
 }
 
 const getProductInfo = (productID) => {

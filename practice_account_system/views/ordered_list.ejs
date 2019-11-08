@@ -4,25 +4,34 @@
     <title>Ordered list page</title>
   </head>
   <body>
-    <form name="form1">
-      <table border="1">
-          <tr>
-            <td>ID</td><td>Product</td><td>Quantity</td><td>Price</td>
-          </tr>
-        
-        <% for (var i in product_list) { %>
-          <tr>
-            <td><%= product_list[i].id%></td>
-            <td><%= product_list[i].name%></td>
-            <td><%= product_list[i].order_quantity%></td>
-            <td><%= product_list[i].order_price%></td>
-          </tr>
-        <% } %>
-      </table>
-    </form>
-    <a>Total prices : <%= total_price%></a> 
+    <% for (var i in total_list) { %>
+      <% let list_info = total_list[i]; %>
+      <form method="GET" action= "/product/delete/">
+        <input type="hidden" name = "order_id" value=<%= list_info['order_id'] %>>
+        <table border="1">
+            <tr>
+              <td>ID</td><td>Product</td><td>Quantity</td><td>Price</td>
+            </tr>
+          <% for (var j in list_info['product_list']) { %>
+            <tr>
+              <td><%= list_info['product_list'][j].id%></td>
+              <td><%= list_info['product_list'][j].name%></td>
+              <td><%= list_info['product_list'][j].order_quantity%></td>
+              <td><%= list_info['product_list'][j].order_price%></td>
+            </tr>
+          <% } %>
+        </table>
+        <td colspan="2">
+            <input type="submit" value="Delete"></td>
+        </td>
+      </form>
+      <a>Total prices : <%= list_info['total_price']%></a> 
+      <br/>
+      <br/>
+    <% } %>
     <br/>
     <br/>
+    
     <a href="/member/updatePage">Update member information</a> 
     <br/>
     <br/>
