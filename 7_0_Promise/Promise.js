@@ -256,3 +256,30 @@ class Promise(func){
 }
 
 */
+
+/*
+超級大重點!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+functtion P(input){
+    return new Promise(){
+        sleep(3)
+        result = {}
+        result.input = input
+        resolve(result)
+    }
+}
+
+while (i < 10) {
+    P(i).then(result => {
+        print result.input
+        這裡顯示的結果，不會是0~9，而是全部都一樣!!!!!!!!!
+        應該可以看成是不管有多少個不一樣的promise，他都是在同一個context底下跑，
+        所以就會then的結果是取決於最後一個跑完的promise，
+        所有的promise都是接到同一個then的意思!!!!!
+        那如果想要跑多個promise怎麼辦?
+        除了用await async?
+    })
+    i = i+1
+} 
+
+*/
